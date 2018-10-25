@@ -4,11 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
+use MarioKart;
 
 class MarioController extends Controller
 {
+
+    protected $marioKart;
+
+    public function __construct(MarioKart $marioKartHelper)
+    {
+        $this->marioKart = $marioKartHelper;
+    }
 
     public function index() : View
     {
@@ -18,9 +25,9 @@ class MarioController extends Controller
 
     public function place(Request $request)
     {
-        $validation = $this->validateCarLocation($request->all());
+        $isValidLocation = $this->marioKart->place($request);
 
-        if (!$validation) {
+        if (!$isValidLocation) {
             return response()->json(false, Response::HTTP_BAD_REQUEST);
         }
 
@@ -30,134 +37,28 @@ class MarioController extends Controller
 
     public function move(Request $request)
     {
-        $validation = $this->validateMoveOrTurn($request);
+        $validMove = $this->marioKart->move($request);
 
-        if (!$validation) {
+        if (!$validMove) {
             return response()->json(false, Response::HTTP_BAD_REQUEST);
-        }
-
-        $nextTileLocation = $this->generateNextTileLocation($request);
-
-        if (!$nextTileLocation) {
-            return response()->json(false, Response::HTTP_BAD_REQUEST);
-        }
-
-        $validation = $this->validateCarLocation([
-            'x' => $nextTileLocation['nextX'],
-            'y' => $nextTileLocation['nextY']
-        ]);
-
-        if (!$validation) {
-            return response()->json([
-                'can_move' => false
-            ], Response::HTTP_BAD_REQUEST);
         }
 
         return response()->json([
             'can_move' => true,
-            'x' => $nextTileLocation['nextX'],
-            'y' => $nextTileLocation['nextY']
+            'x' => $validMove['x'],
+            'y' => $validMove['y']
         ], Response::HTTP_ACCEPTED);
     }
 
 
     public function turn(Request $request)
     {
-        $validation = $this->validateCarLocation($request->all());
+        $isValidTurn = $this->marioKart->turn($request);
 
-        if (!$validation) {
+        if (!$isValidTurn) {
             return response()->json(false, Response::HTTP_BAD_REQUEST);
-        }
-
-        $nextTileLocation = $this->generateNextTileLocation($request);
-
-        if (!$nextTileLocation) {
-            return response()->json(false, Response::HTTP_BAD_REQUEST);
-        }
-
-        $validation = $this->validateCarLocation([
-            'x' => $nextTileLocation['nextX'],
-            'y' => $nextTileLocation['nextY']
-        ]);
-
-        if (!$validation) {
-            return response()->json([
-                'can_move' => false
-            ], Response::HTTP_BAD_REQUEST);
         }
 
         return response()->json(true, Response::HTTP_ACCEPTED);
-    }
-
-
-    //TODO: merge validation methods.
-    private function validateCarLocation(array $param)
-    {
-        $validator = Validator::make($param, [
-            'x' => 'required|string',
-            'y' => 'required|integer|min:1|max:5'
-        ]);
-
-        if ($validator->fails() || !in_array($param['x'], config('mario.nodes'))) {
-            return false;
-        }
-
-        return true;
-    }
-
-
-    private function validateMoveOrTurn(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'x' => 'required|string',
-            'y' => 'required|integer|min:1|max:5',
-            'dir' => 'required|string'
-        ]);
-
-        if ($validator->fails() || !in_array($request->get('x'), config('mario.nodes'))) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private function generateNextTileLocation(Request $request)
-    {
-        $y = $request->get('y');
-        $x = $request->get('x');
-        $nodes = config('mario.nodes');
-
-        //TODO: optimize this check and avoid accepting out of range indexes
-        try {
-            switch ($request->get('dir')) {
-                case 'u':
-                    {
-                        $y++;
-                        break;
-                    }
-                case 'd':
-                    {
-                        $y--;
-
-                        break;
-                    }
-                case 'l':
-                    {
-                        $x = $nodes[array_search($x, $nodes) - 1];
-
-                        break;
-                    }
-                case 'r':
-                    {
-                        $x = $nodes[array_search($x, $nodes) + 1];
-
-                        break;
-                    }
-            }
-        } catch (\Exception $e) {
-            return false;
-        }
-
-        return ['nextX' => $x, 'nextY' => $y];
     }
 }
