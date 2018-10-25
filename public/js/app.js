@@ -151,25 +151,29 @@ $('body').keydown(function (e) {
         case 38:
             carDirection = 'u';
             dirText = 'Up';
+            moveCar('turn');
 
             break;
         case 40:
             carDirection = 'd';
             dirText = 'Down';
+            moveCar('turn');
 
             break;
         case 37:
             carDirection = 'l';
             dirText = 'Left';
+            moveCar('turn');
 
             break;
         case 39:
             carDirection = 'r';
             dirText = 'Right';
+            moveCar('turn');
 
             break;
         case 32:
-            moveCar('turn');
+            moveCar('move');
 
             break;
     }
@@ -177,8 +181,6 @@ $('body').keydown(function (e) {
     if (dirText) {
         $('#dir_indicator').text(dirText).attr('data-dir', carDirection);
     }
-
-    moveCar('');
 });
 
 $('.table_row .cell').on('click', function () {
