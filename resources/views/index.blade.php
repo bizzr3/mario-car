@@ -14,46 +14,52 @@
     <div class="container">
         <table class="mario_table">
             <tr class="table_row">
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
+                <td class="cell" data-x="a" data-y="5">&nbsp;</td>
+                <td class="cell" data-x="b" data-y="5">&nbsp;</td>
+                <td class="cell" data-x="c" data-y="5">&nbsp;</td>
+                <td class="cell" data-x="d" data-y="5">&nbsp;</td>
+                <td class="cell" data-x="e" data-y="5">&nbsp;</td>
             </tr>
             <tr class="table_row">
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
+                <td class="cell" data-x="a" data-y="4">&nbsp;</td>
+                <td class="cell" data-x="b" data-y="4">&nbsp;</td>
+                <td class="cell" data-x="c" data-y="4">&nbsp;</td>
+                <td class="cell" data-x="d" data-y="4">&nbsp;</td>
+                <td class="cell" data-x="e" data-y="4">&nbsp;</td>
             </tr>
             <tr class="table_row">
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
+                <td class="cell" data-x="a" data-y="3">&nbsp;</td>
+                <td class="cell" data-x="b" data-y="3">&nbsp;</td>
+                <td class="cell" data-x="c" data-y="3">&nbsp;</td>
+                <td class="cell" data-x="d" data-y="3">&nbsp;</td>
+                <td class="cell" data-x="e" data-y="3">&nbsp;</td>
             </tr>
             <tr class="table_row">
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
+                <td class="cell" data-x="a" data-y="2">&nbsp;</td>
+                <td class="cell" data-x="b" data-y="2">&nbsp;</td>
+                <td class="cell" data-x="c" data-y="2">&nbsp;</td>
+                <td class="cell" data-x="d" data-y="2">&nbsp;</td>
+                <td class="cell" data-x="e" data-y="2">&nbsp;</td>
             </tr>
             <tr class="table_row">
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
-                <td class="cell">&nbsp;</div>
-                <td class="cell">
-                    <div class="car">
-
-                    </div>
-                </div>
+                <td class="cell" data-x="a" data-y="1">&nbsp;</td>
+                <td class="cell" data-x="b" data-y="1">&nbsp;</td>
+                <td class="cell" data-x="c" data-y="1">&nbsp;</td>
+                <td class="cell" data-x="d" data-y="1">&nbsp;</td>
+                <td class="cell" data-x="e" data-y="1">&nbsp;</td>
             </tr>
         </table>
     </div>
+
+    <audio id="background_music">
+        <source src="/sounds/background.mp3" type="audio/mpeg" />
+        Your browser does not support HTML5 audio.
+    </audio>
+
+    <audio id="move_music">
+        <source src="/sounds/move.mp3" type="audio/mpeg" />
+        Your browser does not support HTML5 audio.
+    </audio>
 
     <script src="{{ elixir('js/vendor/jquery.min.js') }}"></script>
     <script src="{{ mix('js/app.js') }}"></script>
