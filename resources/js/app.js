@@ -20,12 +20,12 @@ let getCarDirection = () => {
     }
 };
 
-let moveCar = () => {
+let moveCar = (mode = 'move', tile = null) => {
     if (!gameStarted) {
         return;
     }
 
-    let tile = $('.car').parent();
+    tile = tile ? tile : $('.car').parent();
 
     $.post('/api/move', {
         'x': tile.attr('data-x'),
@@ -37,10 +37,13 @@ let moveCar = () => {
             effect__.currentTime = 0;
             effect__.play();
 
-            placeCar(null, result.x, result.y);
+            if (mode !== 'move') {
+                placeCar(tile);
+            } else {
+                placeCar(null, result.x, result.y);
+            }
         }
     })
-
 }
 
 let placeCar = (tile, ...location) => {
@@ -83,17 +86,19 @@ $('body').keydown((e) => {
         case 39:
             carDirection = 'r';
             dirText = 'Right';
-        case 32:
-            moveCar();
 
             break;
-        default:
+        case 32:
+            moveCar('turn');
+
             break;
     }
 
     if (dirText) {
         $('#dir_indicator').text(dirText).attr('data-dir', carDirection);
     }
+
+    moveCar('');
 });
 
 $('.table_row .cell').on('click', function () {
@@ -112,6 +117,7 @@ $('.table_row .cell').on('click', function () {
                 effect__.play();
 
                 placeCar($(this));
+                gameStarted = true;
             }
         })
 });
