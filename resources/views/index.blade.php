@@ -51,6 +51,16 @@
         </table>
     </div>
 
+    <audio id="background_music">
+        <source src="/sounds/background.mp3" type="audio/mpeg" />
+        Your browser does not support HTML5 audio.
+    </audio>
+
+    <audio id="move_music">
+        <source src="/sounds/move.mp3" type="audio/mpeg" />
+        Your browser does not support HTML5 audio.
+    </audio>
+
     <script src="{{ elixir('js/vendor/jquery.min.js') }}"></script>
     <script src="{{ mix('js/app.js') }}"></script>
 </body>

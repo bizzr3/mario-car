@@ -76,13 +76,22 @@ module.exports = __webpack_require__(2);
 /***/ (function(module, exports) {
 
 $(function () {
+    var gameStarted = false;
     var car = $('<div>');
     car.addClass('car');
 
     $('.table_row .cell').on('click', function () {
         var _this = this;
 
+        if (!gameStarted) {
+            $('#background_music').get(0).play();
+        }
+
         $.post('/api/place', { 'x': $(this).attr('data-x'), 'y': $(this).attr('data-y') }).done(function (result) {
+            var effect__ = $('#move_music').get(0);
+            effect__.currentTime = 0;
+            effect__.play();
+
             $('.car').remove();
             $(_this).append(car);
         });
