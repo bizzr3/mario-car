@@ -51,6 +51,22 @@
         </table>
     </div>
 
+    <div id="tip">
+        <div class="icon"></div>
+        <p>
+            Welcome Mario Lovers, to start you can click on any tile in the table, even more,
+            if you want to change the direction of the Mario's car, you can press arrow keys
+            to set the direction and then place Mario's car.
+        </p>
+    </div>
+
+    <div id="direction">
+        <div class="icon"></div>
+        <p>
+            Direction:&nbsp;<strong id="dir_indicator" data-dir="r">Right</strong>
+        </p>
+    </div>
+
     <audio id="background_music">
         <source src="/sounds/background.mp3" type="audio/mpeg" />
         Your browser does not support HTML5 audio.
