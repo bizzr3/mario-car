@@ -97,6 +97,40 @@ var getCarDirection = function getCarDirection() {
     }
 };
 
+var moveCar = function moveCar() {
+    var tile = $('.car').parent();
+
+    $.post('/api/move', {
+        'x': tile.attr('data-x'),
+        'y': tile.attr('data-y'),
+        'dir': carDirection
+    }).done(function (result) {
+        if (result.can_move) {
+            var effect__ = $('#move_music').get(0);
+            effect__.currentTime = 0;
+            effect__.play();
+
+            placeCar(null, result.x, result.y);
+        }
+    });
+};
+
+var placeCar = function placeCar(tile) {
+    var car = $('<div>');
+    car.addClass('car');
+
+    $('.car').remove();
+
+    if (!tile) {
+        $('td[data-x="' + (arguments.length <= 1 ? undefined : arguments[1]) + '"][data-y="' + (arguments.length <= 2 ? undefined : arguments[2]) + '"]').append(car);
+    } else {
+        $(tile).append(car);
+    }
+
+    var dir = getCarDirection();
+    $('.car').addClass(dir ? dir : 'to-right');
+};
+
 $('body').keydown(function (e) {
     e.preventDefault;
 
@@ -121,11 +155,14 @@ $('body').keydown(function (e) {
         case 39:
             carDirection = 'r';
             dirText = 'Right';
+        case 32:
+            moveCar();
 
             break;
         default:
             break;
     }
+
     if (dirText) {
         $('#dir_indicator').text(dirText).attr('data-dir', carDirection);
     }
@@ -134,22 +171,21 @@ $('body').keydown(function (e) {
 $('.table_row .cell').on('click', function () {
     var _this = this;
 
-    var car = $('<div>');
-    car.addClass('car');
-
     if (!gameStarted) {
         $('#background_music').get(0).play();
     }
 
-    $.post('/api/place', { 'x': $(this).attr('data-x'), 'y': $(this).attr('data-y') }).done(function (result) {
-        var effect__ = $('#move_music').get(0);
-        effect__.currentTime = 0;
-        effect__.play();
+    var x = $(this).attr('data-x');
+    var y = $(this).attr('data-y');
 
-        $('.car').remove();
-        $(_this).append(car);
-        var dir = getCarDirection();
-        $('.car').addClass(dir ? dir : 'to-right');
+    $.post('/api/place', { 'x': x, 'y': y }).done(function (result) {
+        if (result) {
+            var effect__ = $('#move_music').get(0);
+            effect__.currentTime = 0;
+            effect__.play();
+
+            placeCar($(_this));
+        }
     });
 });
 

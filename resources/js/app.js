@@ -20,6 +20,45 @@ let getCarDirection = () => {
     }
 };
 
+let moveCar = () => {
+    if (!gameStarted) {
+        return;
+    }
+
+    let tile = $('.car').parent();
+
+    $.post('/api/move', {
+        'x': tile.attr('data-x'),
+        'y': tile.attr('data-y'),
+        'dir': carDirection
+    }).done(result => {
+        if (result.can_move) {
+            let effect__ = $('#move_music').get(0);
+            effect__.currentTime = 0;
+            effect__.play();
+
+            placeCar(null, result.x, result.y);
+        }
+    })
+
+}
+
+let placeCar = (tile, ...location) => {
+    let car = $('<div>');
+    car.addClass('car');
+
+    $('.car').remove();
+
+    if (!tile) {
+        $(`td[data-x="${location[0]}"][data-y="${location[1]}"]`).append(car);
+    } else {
+        $(tile).append(car);
+    }
+
+    let dir = getCarDirection();
+    $('.car').addClass(dir ? dir : 'to-right');
+}
+
 $('body').keydown((e) => {
     e.preventDefault;
 
@@ -44,33 +83,35 @@ $('body').keydown((e) => {
         case 39:
             carDirection = 'r';
             dirText = 'Right';
+        case 32:
+            moveCar();
 
             break;
         default:
             break;
     }
+
     if (dirText) {
         $('#dir_indicator').text(dirText).attr('data-dir', carDirection);
     }
 });
 
 $('.table_row .cell').on('click', function () {
-    let car = $('<div>');
-    car.addClass('car');
-
     if (!gameStarted) {
         $('#background_music').get(0).play();
     }
 
-    $.post('/api/place', { 'x': $(this).attr('data-x'), 'y': $(this).attr('data-y') })
-        .done(result => {
-            let effect__ = $('#move_music').get(0);
-            effect__.currentTime = 0;
-            effect__.play();
+    let x = $(this).attr('data-x');
+    let y = $(this).attr('data-y');
 
-            $('.car').remove();
-            $(this).append(car);
-            let dir = getCarDirection();
-            $('.car').addClass(dir ? dir : 'to-right');
+    $.post('/api/place', { 'x': x, 'y': y })
+        .done(result => {
+            if (result) {
+                let effect__ = $('#move_music').get(0);
+                effect__.currentTime = 0;
+                effect__.play();
+
+                placeCar($(this));
+            }
         })
 });
