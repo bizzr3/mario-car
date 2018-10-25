@@ -33,13 +33,14 @@ let moveCar = (mode = 'move', tile = null) => {
         'dir': carDirection
     }).done(result => {
         if (result.can_move) {
-            let effect__ = $('#move_music').get(0);
-            effect__.currentTime = 0;
-            effect__.play();
 
             if (mode !== 'move') {
                 placeCar(tile);
             } else {
+                let effect__ = $('#move_music').get(0);
+                effect__.currentTime = 0;
+                effect__.play();
+
                 placeCar(null, result.x, result.y);
             }
         }
