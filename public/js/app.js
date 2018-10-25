@@ -75,26 +75,81 @@ module.exports = __webpack_require__(2);
 /* 1 */
 /***/ (function(module, exports) {
 
-$(function () {
-    var gameStarted = false;
+var gameStarted = false;
+var carDirection = 'r';
+
+var getCarDirection = function getCarDirection() {
+    switch (carDirection) {
+        case 'u':
+            return 'to-up';
+            break;
+        case 'l':
+            return 'to-left';
+            break;
+        case 'd':
+            return 'to-down';
+            break;
+        case 'r':
+            return 'to-right';
+            break;
+        default:
+            break;
+    }
+};
+
+$('body').keydown(function (e) {
+    e.preventDefault;
+
+    var dirText = '';
+
+    switch (e.keyCode) {
+        case 38:
+            carDirection = 'u';
+            dirText = 'Up';
+
+            break;
+        case 40:
+            carDirection = 'd';
+            dirText = 'Down';
+
+            break;
+        case 37:
+            carDirection = 'l';
+            dirText = 'Left';
+
+            break;
+        case 39:
+            carDirection = 'r';
+            dirText = 'Right';
+
+            break;
+        default:
+            break;
+    }
+    if (dirText) {
+        $('#dir_indicator').text(dirText).attr('data-dir', carDirection);
+    }
+});
+
+$('.table_row .cell').on('click', function () {
+    var _this = this;
+
     var car = $('<div>');
     car.addClass('car');
 
-    $('.table_row .cell').on('click', function () {
-        var _this = this;
+    if (!gameStarted) {
+        $('#background_music').get(0).play();
+    }
 
-        if (!gameStarted) {
-            $('#background_music').get(0).play();
-        }
+    $.post('/api/place', { 'x': $(this).attr('data-x'), 'y': $(this).attr('data-y') }).done(function (result) {
+        var effect__ = $('#move_music').get(0);
+        effect__.currentTime = 0;
+        effect__.play();
 
-        $.post('/api/place', { 'x': $(this).attr('data-x'), 'y': $(this).attr('data-y') }).done(function (result) {
-            var effect__ = $('#move_music').get(0);
-            effect__.currentTime = 0;
-            effect__.play();
-
-            $('.car').remove();
-            $(_this).append(car);
-        });
+        $('.car').remove();
+        $(_this).append(car);
+        var dir = getCarDirection();
+        $('.car').addClass(dir ? dir : 'to-right');
     });
 });
 

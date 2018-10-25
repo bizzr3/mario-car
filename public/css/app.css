@@ -54,8 +54,71 @@ body .mario_table {
 body .car {
   width: 80px;
   height: 80px;
-  background-image: url("/img/car.png");
   background-size: cover;
   background-repeat: no-repeat;
   margin: -16px 0 0 8px;
+}
+
+body .to-left {
+  background-image: url("/img/car-left.png");
+}
+
+body .to-right {
+  background-image: url("/img/car-right.png");
+}
+
+body .to-down {
+  background-image: url("/img/car-down.png");
+}
+
+body .to-up {
+  background-image: url("/img/car-up.png");
+}
+
+body #tip {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: #cecece;
+  position: absolute;
+  left: 50px;
+  top: 50px;
+  width: 344px;
+  border-radius: 10px;
+  padding: 13px;
+}
+
+body #tip p {
+  text-align: center;
+}
+
+body #tip .icon {
+  background-image: url("/img/tip.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 80px;
+  height: 80px;
+  margin: 5px auto;
+}
+
+body #direction {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: #cecece;
+  position: absolute;
+  left: 50px;
+  top: 350px;
+  width: 344px;
+  border-radius: 10px;
+  padding: 13px;
+}
+
+body #direction p {
+  text-align: center;
+}
+
+body #direction .icon {
+  background-image: url("/img/direction.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 80px;
+  height: 80px;
+  margin: 5px auto;
 }
