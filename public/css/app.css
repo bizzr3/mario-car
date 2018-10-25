@@ -57,6 +57,5 @@ body .car {
   background-image: url("/img/car.png");
   background-size: cover;
   background-repeat: no-repeat;
-  position: absolute;
-  margin: 8px;
+  margin: -16px 0 0 8px;
 }

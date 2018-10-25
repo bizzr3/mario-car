@@ -75,7 +75,19 @@ module.exports = __webpack_require__(2);
 /* 1 */
 /***/ (function(module, exports) {
 
-$(function () {});
+$(function () {
+    var car = $('<div>');
+    car.addClass('car');
+
+    $('.table_row .cell').on('click', function () {
+        var _this = this;
+
+        $.post('/api/place', { 'x': $(this).attr('data-x'), 'y': $(this).attr('data-y') }).done(function (result) {
+            $('.car').remove();
+            $(_this).append(car);
+        });
+    });
+});
 
 /***/ }),
 /* 2 */
