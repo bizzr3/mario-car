@@ -1,0 +1,57 @@
+body {
+    background-color: #2a2a2a;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+
+    .container {
+        background-image: url('/img/back.png');
+        background-size: cover;
+        background-repeat:no-repeat;
+        width: 1000px;
+        height: 829px;
+        margin-top:1%;
+        padding-top: 6%;
+    }
+
+    .cell {
+        border-right: 3px solid #000000;
+        border-bottom: 3px solid #000000;
+        float: left;
+        width: 100px;
+        height: 100px;
+        background-color:rgba(255,255,255, 0.8);
+
+        &:hover {
+            background-color:rgba(255,255,255, 0.6)
+        }
+    }
+
+    .table_row {
+        clear: both;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .mario_table {
+        border-left: 3px solid #000000;
+        border-top: 3px solid #000000;
+        margin-left: 22%;
+        margin-right: 22%;
+        cursor: pointer;
+    }
+
+    .car {
+        width: 80px;
+        height: 80px;
+        background-image: url('/img/car.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        position: absolute;
+        margin: 8px;
+    }
+}
