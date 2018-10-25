@@ -98,7 +98,14 @@ var getCarDirection = function getCarDirection() {
 };
 
 var moveCar = function moveCar() {
-    var tile = $('.car').parent();
+    var mode = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'move';
+    var tile = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+    if (!gameStarted) {
+        return;
+    }
+
+    tile = tile ? tile : $('.car').parent();
 
     $.post('/api/move', {
         'x': tile.attr('data-x'),
@@ -110,7 +117,11 @@ var moveCar = function moveCar() {
             effect__.currentTime = 0;
             effect__.play();
 
-            placeCar(null, result.x, result.y);
+            if (mode !== 'move') {
+                placeCar(tile);
+            } else {
+                placeCar(null, result.x, result.y);
+            }
         }
     });
 };
@@ -140,26 +151,30 @@ $('body').keydown(function (e) {
         case 38:
             carDirection = 'u';
             dirText = 'Up';
+            moveCar('turn');
 
             break;
         case 40:
             carDirection = 'd';
             dirText = 'Down';
+            moveCar('turn');
 
             break;
         case 37:
             carDirection = 'l';
             dirText = 'Left';
+            moveCar('turn');
 
             break;
         case 39:
             carDirection = 'r';
             dirText = 'Right';
-        case 32:
-            moveCar();
+            moveCar('turn');
 
             break;
-        default:
+        case 32:
+            moveCar('move');
+
             break;
     }
 
@@ -185,6 +200,7 @@ $('.table_row .cell').on('click', function () {
             effect__.play();
 
             placeCar($(_this));
+            gameStarted = true;
         }
     });
 });

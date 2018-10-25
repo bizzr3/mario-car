@@ -27,14 +27,102 @@ class MarioController extends Controller
         return response()->json(true, Response::HTTP_ACCEPTED);
     }
 
+
     public function move(Request $request)
     {
-        $validation = $this->validateMove($request);
+        $validation = $this->validateMoveOrTurn($request);
 
         if (!$validation) {
             return response()->json(false, Response::HTTP_BAD_REQUEST);
         }
 
+        $nextTileLocation = $this->generateNextTileLocation($request);
+
+        if (!$nextTileLocation) {
+            return response()->json(false, Response::HTTP_BAD_REQUEST);
+        }
+
+        $validation = $this->validateCarLocation([
+            'x' => $nextTileLocation['nextX'],
+            'y' => $nextTileLocation['nextY']
+        ]);
+
+        if (!$validation) {
+            return response()->json([
+                'can_move' => false
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        return response()->json([
+            'can_move' => true,
+            'x' => $nextTileLocation['nextX'],
+            'y' => $nextTileLocation['nextY']
+        ], Response::HTTP_ACCEPTED);
+    }
+
+
+    public function turn(Request $request)
+    {
+        $validation = $this->validateCarLocation($request->all());
+
+        if (!$validation) {
+            return response()->json(false, Response::HTTP_BAD_REQUEST);
+        }
+
+        $nextTileLocation = $this->generateNextTileLocation($request);
+
+        if (!$nextTileLocation) {
+            return response()->json(false, Response::HTTP_BAD_REQUEST);
+        }
+
+        $validation = $this->validateCarLocation([
+            'x' => $nextTileLocation['nextX'],
+            'y' => $nextTileLocation['nextY']
+        ]);
+
+        if (!$validation) {
+            return response()->json([
+                'can_move' => false
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
+        return response()->json(true, Response::HTTP_ACCEPTED);
+    }
+
+
+    //TODO: merge validation methods.
+    private function validateCarLocation(array $param)
+    {
+        $validator = Validator::make($param, [
+            'x' => 'required|string',
+            'y' => 'required|integer|min:1|max:5'
+        ]);
+
+        if ($validator->fails() || !in_array($param['x'], config('mario.nodes'))) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    private function validateMoveOrTurn(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'x' => 'required|string',
+            'y' => 'required|integer|min:1|max:5',
+            'dir' => 'required|string'
+        ]);
+
+        if ($validator->fails() || !in_array($request->get('x'), config('mario.nodes'))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private function generateNextTileLocation(Request $request)
+    {
         $y = $request->get('y');
         $x = $request->get('x');
         $nodes = config('mario.nodes');
@@ -67,52 +155,9 @@ class MarioController extends Controller
                     }
             }
         } catch (\Exception $e) {
-            return response()->json(false, Response::HTTP_BAD_REQUEST);
-        }
-
-        $validation = $this->validateCarLocation(['x' => $x, 'y' => $y]);
-
-        if (!$validation) {
-            return response()->json([
-                'can_move' => false
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
-        return response()->json([
-            'can_move' => true,
-            'x' => $x,
-            'y' => $y
-        ], Response::HTTP_ACCEPTED);
-    }
-
-    //TODO: merge validation methods.
-
-    private function validateCarLocation(array $param)
-    {
-        $validator = Validator::make($param, [
-            'x' => 'required|string',
-            'y' => 'required|integer|min:1|max:5'
-        ]);
-
-        if ($validator->fails() || !in_array($param['x'], config('mario.nodes'))) {
             return false;
         }
 
-        return true;
-    }
-
-    private function validateMove(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'x' => 'required|string',
-            'y' => 'required|integer|min:1|max:5',
-            'dir' => 'required|string'
-        ]);
-
-        if ($validator->fails() || !in_array($request->get('x'), config('mario.nodes'))) {
-            return false;
-        }
-
-        return true;
+        return ['nextX' => $x, 'nextY' => $y];
     }
 }

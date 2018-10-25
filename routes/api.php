@@ -19,3 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/place', 'MarioController@place');
 Route::post('/move', 'MarioController@move');
+Route::post('/turn', 'MarioController@turn');
