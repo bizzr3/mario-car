@@ -57,13 +57,19 @@
             Welcome Mario Lovers, to start you can click on any tile in the table, even more,
             if you want to change the direction of the Mario's car, you can press arrow keys
             to set the direction and then place Mario's car.
+            <hr>
+            To move the car, press <strong class='text-success'>Space</strong>.
+            <br>
+            To turn the car, use <strong class='text-success'>Arrow Keys</strong>.
+            <br>
+            Better experience <strong class='text-success'>With Sound</strong>, so open the sound and enjoy drving mario car. :)
         </p>
     </div>
 
     <div id="direction">
         <div class="icon"></div>
         <p>
-            Direction:&nbsp;<strong id="dir_indicator" data-dir="r">Right</strong>
+            Direction:&nbsp;<strong id="dir_indicator" data-dir="r" class="text-success">Right</strong>
         </p>
     </div>
 
